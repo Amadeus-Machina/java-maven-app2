@@ -29,8 +29,10 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    echo "deploying"
-                    //gv.deployApp()
+                    def dockerCmd = 'docker run -p 3080:3080 -d clm0112/devops_nana:tagname'
+                    sshagent(['ec2-server-key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@18.117.9.224 ${dockerCmd}"
+                    }
                 }
             }
         }
